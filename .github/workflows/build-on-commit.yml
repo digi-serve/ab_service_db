@@ -4,6 +4,7 @@ on:
     branches:
       - master
       - develop
+      - nh/multiplatform
 jobs:
   publish:
     name: Push image to Docker Hub
@@ -41,13 +42,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
+      # digiserve/${{ steps.repo_name.outputs.docker_hub_repo }}:${{ steps.branch.outputs.branch }}
+      # digiserve/${{ steps.repo_name.outputs.docker_hub_repo }}:${{ steps.sha.outputs.short }}
       - name: Build and push to Docker Hub
         uses: docker/build-push-action@v4
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            digiserve/${{ steps.repo_name.outputs.docker_hub_repo }}:${{ steps.branch.outputs.branch }}
-            digiserve/${{ steps.repo_name.outputs.docker_hub_repo }}:${{ steps.sha.outputs.short }}
+          tags: digiserve/${{ steps.repo_name.outputs.docker_hub_repo }}:multiplatform
